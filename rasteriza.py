@@ -2,16 +2,21 @@
 from segmentos_de_reta import Reta
 def resultVariacaoEmX(reta= Reta):
     variacaoX = reta.p2[0] - reta.p1[0]
-    variacaoy = reta.p2[1] - reta.p1[1]
-    return variacaoX > variacaoy
+    variacaoY = reta.p2[1] - reta.p1[1]
+    return (variacaoX > variacaoY, variacaoX, variacaoY)
 
-    return 
 def rasteriza(reta= Reta):
-    if(resultVariacaoEmX(reta)):
-        print("1")
+    varEmX, variacaoX, variacaoY = resultVariacaoEmX(reta)
+    if(varEmX):
+        # Variacao em X
+        x = reta.p1[0]
+        y = reta.p1[1]
+        m = variacaoY/variacaoX
     else:
         print("2")
+        m = variacaoY/variacaoX
 
-    print(reta.p1)
+
+
     
 rasteriza(Reta([1, 10], [200, 23]))
