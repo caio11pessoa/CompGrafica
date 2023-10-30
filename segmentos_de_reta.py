@@ -1,6 +1,6 @@
 class Reta:
-    # p1 = (x1, y1)
-    # p2 = (x2, y2)
+    # p1 = [x1, y1]
+    # p2 = [x2, y2]
 
     p1 = [int, int]
     p2 = [int, int]
