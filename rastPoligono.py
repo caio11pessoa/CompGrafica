@@ -46,16 +46,25 @@ def draw_line(image, x0, y0, x1, y1):
             error -= 1
 
 # Exemplo de uso
-width, height = 100, 100
-image = create_image(width, height)
+resolucaoX = 16
+resolucaoY = 8
+
+#width, height = 100*resolucaoX, 100*resolucaoY
+#image = create_image(width, height)
 
 # Resoluções para testar
-resolutions = [10, 20, 30, 40]
+resolutions = [(100, 100 ), (300, 300)]
 
 # Rasterizar triângulos, quadrados e hexágonos para cada resolução
-for resolution in resolutions:
+for resolucaoX, resolucaoY in resolutions:
+    width, height = resolucaoX, resolucaoY
+    image = create_image(width, height)
     # Triângulo equilátero
-    triangle_vertices = [(30, 80), (50, 20), (70, 80)]
+    triangle_vertices = [
+      (3*int((resolucaoX/10)), 8*int((resolucaoY/10))),
+      (5*int((resolucaoX/10)), 2*int((resolucaoY/10))),
+      (7*int((resolucaoX/10)), 8*int((resolucaoY/10)))
+    ]
     draw_polygon(image, triangle_vertices)
 
     # Quadrado
@@ -68,7 +77,7 @@ for resolution in resolutions:
 
     # Exibindo a imagem
     plt.imshow(image, cmap='gray', origin='lower', extent=[0, width, 0, height])
-    plt.title(f'Rasterização de Polígonos - Resolução {resolution}')
+    plt.title(f'Rasterização de Polígonos - Resolução ')
     plt.show()
 
     # Limpar a imagem para o próximo teste
