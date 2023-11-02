@@ -2,42 +2,46 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 def create_image(width, height):
-    return np.zeros((height, width), dtype=np.uint8)
+  return np.zeros((height, width), dtype=np.uint8)
 
 def hermite_curve(t, p0, m0, p1, m1):
     h00 = 2*t**3 - 3*t**2 + 1
     h10 = t**3 - 2*t**2 + t
     h01 = -2*t**3 + 3*t**2
     h11 = t**3 - t**2
-    
+
     x = h00*p0[0] + h10*m0[0] + h01*p1[0] + h11*m1[0]
     y = h00*p0[1] + h10*m0[1] + h01*p1[1] + h11*m1[1]
-    
+
     return x, y
 
-def rasterize_hermite_curve(image, p0, m0, p1, m1, resolution=100):
-    for i in range(resolution + 1):
-        t = i / resolution
-        x, y = hermite_curve(t, p0, m0, p1, m1)
-        x, y = int(round(x)), int(round(y))
-        if 0 <= x < image.shape[1] and 0 <= y < image.shape[0]:
-            image[y, x] = 255  # 255 representa o branco
+# Defina os pontos de controle e os vetores tangentes
+p0 = np.array([-10, -10])
+m0 = np.array([20, 20])
+p1 = np.array([40, 20])
+m1 = np.array([-10, 20])
 
-# Ajuste a resolução alterando a largura e a altura
-width, height = 100, 100
+# Gere pontos na curva de Hermite
+num_points = 100 #resolucao
+t_values = np.linspace(0, 1, num_points)
+curve_points = np.array([hermite_curve(t, p0, m0, p1, m1) for t in t_values])
+
+# Desenhe a curva de Hermite
+plt.plot(curve_points[:, 0], curve_points[:, 1], label='Curva de Hermite')
+plt.scatter([p0[0], p1[0]], [p0[1], p1[1]], color='red', marker='o', label='Pontos de Controle')
+plt.quiver([p0[0], p1[0]], [p0[1], p1[1]], [m0[0], m1[0]], [m0[1], m1[1]], color='blue', scale=1, scale_units='xy', angles='xy', label='Vetores Tangentes')
+
+
+# Configurações adicionais
+
+width, height = 50, 50
 image = create_image(width, height)
+plt.imshow(image, cmap='gray', origin='lower', extent=[-width, width, -height, height])
 
-# Pontos de controle
-p0 = np.array([10, 10])
-p1 = np.array([80, 40])
-
-# Vetores tangentes nos pontos de controle
-m0 = np.array([2, 2])
-m1 = np.array([-2, 2])
-
-rasterize_hermite_curve(image, p0, m0, p1, m1)
-
-# Exibindo a imagem
-plt.imshow(image, cmap='gray', origin='lower', extent=[0, width, 0, height])
-plt.title('Rasterização de Curva de Hermite')
+plt.title('Curva de Hermite')
+plt.xlabel('X')
+plt.ylabel('Y')
+plt.legend()
+plt.grid(True)
+plt.savefig('Hermite curve.png')
 plt.show()
